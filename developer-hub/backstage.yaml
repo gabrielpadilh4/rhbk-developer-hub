@@ -4,7 +4,6 @@ metadata:
   labels:
     app.kubernetes.io/name: backstage
   name: developer-hub
-  namespace: poc-rhbk-developer-hub
 spec:
   application:
     appConfig:
@@ -13,6 +12,8 @@ spec:
       - name: rhbk-app-config
     dynamicPluginsConfigMapName: rhbk-dynamic-plugin
     extraEnvs:
+      secrets:
+      - name: rhdh-rhbk-cred
       envs:
       - name: NODE_TLS_REJECT_UNAUTHORIZED # necessary for dealing with the self signed cert of RHBK - cert validation disabled
         value: "0"

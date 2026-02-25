@@ -5,11 +5,9 @@ auth:
   providers:
     oidc:
       production:
-        # this should point to the ".well-known/openid-configuration" endpoint of the realm used by rhdh
-        # e.g https://<keycloakhost>/realms/<realm of rhdh>/.well-known/openid-configuration
-        metadataUrl: "https://keycloak.apps.rosa.uzrek-kipk2-2i6.geui.p3.openshiftapps.com/realms/rhdh/.well-known/openid-configuration"
-        clientId: rhdh-catalog
-        clientSecret: yrYCAqASuxFir18MoMm0jJClPqNMmc9Y
+        metadataUrl: "${KEYCLOAK_BASE_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration"
+        clientId: ${KEYCLOAK_CLIENT_ID}
+        clientSecret: ${KEYCLOAK_CLIENT_SECRET}
         prompt: auto
         sessionDuration: { hours: 24 }
         signIn:
@@ -20,13 +18,11 @@ catalog:
   providers:
     keycloakOrg:
       default:
-        # this points to RHBK base url
-        # e.g https://<RHBK host>
-        baseUrl: "https://keycloak.apps.rosa.uzrek-kipk2-2i6.geui.p3.openshiftapps.com"
-        clientId: rhdh-catalog
-        clientSecret: yrYCAqASuxFir18MoMm0jJClPqNMmc9Y
-        realm: rhdh
-        loginRealm: rhdh
+        baseUrl: ${KEYCLOAK_BASE_URL}
+        clientId: ${KEYCLOAK_CLIENT_ID}
+        clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+        realm: ${KEYCLOAK_REALM}
+        loginRealm: ${KEYCLOAK_REALM}
         userQuerySize: 100
         groupQuerySize: 100
         schedule:
