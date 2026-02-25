@@ -1,0 +1,40 @@
+auth:
+  session:
+    secret: myramdonsessionsecret
+  environment: production
+  providers:
+    oidc:
+      production:
+        # this should point to the ".well-known/openid-configuration" endpoint of the realm used by rhdh
+        # e.g https://<keycloakhost>/realms/<realm of rhdh>/.well-known/openid-configuration
+        metadataUrl: "https://keycloak.apps.rosa.uzrek-kipk2-2i6.geui.p3.openshiftapps.com/realms/rhdh/.well-known/openid-configuration"
+        # clientId: auth-rhdh-client
+        # clientSecret: 0kBy8ay5fr7RR3om7ts1FfmgqmWnt3kx
+        clientId: rhdh-catalog
+        clientSecret: yrYCAqASuxFir18MoMm0jJClPqNMmc9Y
+        prompt: auto
+        sessionDuration: { hours: 24 }
+        signIn:
+          resolvers:
+            - resolver: emailLocalPartMatchingUserEntityName
+signInPage: oidc
+catalog:
+  # import:
+  #  entityFilename: catalog-info.yaml
+  #  pullRequestBranchName: backstage-integration
+  providers:
+    keycloakOrg:
+      default:
+        # this points to RHBK base url
+        # e.g https://<RHBK host>
+        baseUrl: "https://keycloak.apps.rosa.uzrek-kipk2-2i6.geui.p3.openshiftapps.com"
+        clientId: rhdh-catalog
+        clientSecret: yrYCAqASuxFir18MoMm0jJClPqNMmc9Y
+        realm: rhdh
+        loginRealm: rhdh
+        userQuerySize: 100
+        groupQuerySize: 100
+        schedule:
+          frequency: { minutes: 1 }
+          timeout: { minutes: 1 }
+          initialDelay: { seconds: 30}

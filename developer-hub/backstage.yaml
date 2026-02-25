@@ -1,0 +1,27 @@
+apiVersion: rhdh.redhat.com/v1alpha4
+kind: Backstage
+metadata:
+  labels:
+    app.kubernetes.io/name: backstage
+  name: developer-hub
+  namespace: poc-rhbk-developer-hub
+spec:
+  application:
+    appConfig:
+      mountPath: /opt/app-root/src
+      configMaps:
+      - name: rhbk-app-config
+    dynamicPluginsConfigMapName: rhbk-dynamic-plugin
+    extraEnvs:
+      envs:
+      - name: NODE_TLS_REJECT_UNAUTHORIZED # necessary for dealing with the self signed cert of RHBK - cert validation disabled
+        value: "0"
+    extraFiles:
+      mountPath: /opt/app-root/src
+    replicas: 1
+    route:
+      enabled: true
+  database:
+    enableLocalDb: true
+  monitoring:
+    enabled: false
