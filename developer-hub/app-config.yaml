@@ -8,8 +8,6 @@ auth:
         # this should point to the ".well-known/openid-configuration" endpoint of the realm used by rhdh
         # e.g https://<keycloakhost>/realms/<realm of rhdh>/.well-known/openid-configuration
         metadataUrl: "https://keycloak.apps.rosa.uzrek-kipk2-2i6.geui.p3.openshiftapps.com/realms/rhdh/.well-known/openid-configuration"
-        # clientId: auth-rhdh-client
-        # clientSecret: 0kBy8ay5fr7RR3om7ts1FfmgqmWnt3kx
         clientId: rhdh-catalog
         clientSecret: yrYCAqASuxFir18MoMm0jJClPqNMmc9Y
         prompt: auto
@@ -19,9 +17,6 @@ auth:
             - resolver: emailLocalPartMatchingUserEntityName
 signInPage: oidc
 catalog:
-  # import:
-  #  entityFilename: catalog-info.yaml
-  #  pullRequestBranchName: backstage-integration
   providers:
     keycloakOrg:
       default:
