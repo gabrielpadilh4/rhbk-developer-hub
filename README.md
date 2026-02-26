@@ -6,7 +6,6 @@ This repository provides a complete guide and the necessary manifests to install
 The integration consists of two main parts:
 1. **Red Hat build of Keycloak (RHBK):** Acts as the Identity Provider (IdP) for authentication and the source of truth for Users.
 2. **Red Hat Developer Hub (RHDH):** The developer portal that uses Keycloak for OIDC authentication and synchronizes its software catalog with Keycloak's organizational data.
-   ![Operator Installed](./operators.png)
 
 
 ## 📁 Repository Structure
@@ -43,5 +42,7 @@ By default, this repository is configured for a **Proof of Concept (POC)**. It u
 
 ## 🛠️ Prerequisites
 * An OpenShift cluster with both the **Keycloak Operator** and **Red Hat Developer Hub Operator** installed.
+   ![Operator Installed](./operators.png)
+
 * The `oc` CLI tool authenticated to your cluster.
 * `openssl` for local certificate generation.
