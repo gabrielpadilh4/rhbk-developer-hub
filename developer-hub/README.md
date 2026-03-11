@@ -6,13 +6,6 @@ This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with
 - An OpenShift cluster with the Developer Hub Operator installed.
 - `oc` CLI tool authenticated to your cluster.
 
-## Configuration Setup
-
-Before deploying, update `app-config.yaml` with your specific environment details:
-- **metadataUrl**: Your Keycloak OpenID configuration endpoint.
-- **clientId/clientSecret**: Your Keycloak client credentials.
-- **baseUrl**: Your RHBK host URL.
-
 ## Deployment Steps
 
 1. Create a namespace for the developer hub demo
@@ -22,7 +15,7 @@ Before deploying, update `app-config.yaml` with your specific environment detail
 
 2. Create the secret with the keycloak credentials
    ```
-   oc create secret generic rhdh-rhbk-cred --from-literal KEYCLOAK_BASE_URL="https://$(oc get routes/rhbk-route -o jsonpath='{.spec.host}' -n rhbk && echo)" --from-literal KEYCLOAK_CLIENT_ID=rhdh --from-literal KEYCLOAK_CLIENT_SECRET=rhdh-super-secret --from-literal KEYCLOAK_REALM=rhdh -n devhub-demo
+   oc create secret generic rhbk-secret --from-literal KEYCLOAK_BASE_URL="https://$(oc get routes/rhbk-route -o jsonpath='{.spec.host}' -n rhbk && echo)" --from-literal KEYCLOAK_CLIENT_ID=rhdh --from-literal KEYCLOAK_CLIENT_SECRET=rhdh-super-secret --from-literal KEYCLOAK_REALM=rhdh -n devhub-demo
    ```
 
 3. Create the configmap that enables the Red Hat build of Keycloak dynamic plugin

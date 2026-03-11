@@ -34,18 +34,17 @@ To achieve a successful integration, follow the documentation in each subdirecto
    oc get installplan -n rhdh-operator
    oc patch installplan/<install-plan-name> -n rhdh-operator --type merge --patch '{"spec":{"approved":true}}'
    ```
-
-The result is the Red Hat build of Keycloak installed in the `rhbk` namespace and the Red Hat Developer Hub installed in the `rhdh-operator` namespace.
-![Operator Installed](./operators.png)
+   The result is the Red Hat build of Keycloak installed in the `rhbk` namespace and the Red Hat Developer Hub installed in the `rhdh-operator` namespace.
+      ![Operator Installed](./operators.png)
 
 ### Phase 2: Identity Provider Setup
 Navigate to the [RHBK directory](./rhbk/README.md) to:
 1. Deploy a PostgreSQL database for Keycloak.
-2. Configure TLS certificates and deploy the Keycloak Operator/Instance.
-3. Import the pre-configured `rhdh-realm.json` and set up the `rhdh-catalog` client.
+2. Creatte the Red Hat build of Keycloak instance
 
 ### Phase 3: Developer Hub Setup
 Once Keycloak is running and configured, navigate to the [Developer Hub directory](./developer-hub/README.md) to:
 1. Configure `app-config.yaml` with the OIDC endpoints and secrets generated in Phase 1.
 2. Enable the Keycloak dynamic plugin via ConfigMap.
 3. Deploy the RHDH instance via the Backstage Custom Resource.
+4. Import the pre-configured `rhbk/rhdh-realm.yaml` and set up the `rhdh` realm and client.

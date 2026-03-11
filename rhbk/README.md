@@ -5,7 +5,6 @@ This guide covers the deployment of Red Hat build of Keycloak Operator configure
 ## Prerequisites
 - An OpenShift cluster with the Keycloak Operator installed.
 - `oc` CLI tool authenticated to your cluster.
-- `openssl` for generating local certificates.
 
 ## Deployment Steps
 
@@ -21,10 +20,6 @@ Apply the Keycloak Custom Resource (CR). This triggers the Operator to configure
    ```
    oc apply -f keycloak.yaml -n rhbk
    ```
-Wait until the `keycloak-instance-0` pod is running and apply the realm configuration:
-   ```
-   oc apply -f rhdh-realm.yaml -n rhbk
-   ``` 
 
 3. Expose Red Hat build of Keycloak instance
    ``` 
