@@ -15,42 +15,63 @@ Before deploying, update `app-config.yaml` with your specific environment detail
 
 ## Deployment Steps
 
-1. Create the secret with the keycloak credentials
-   ~~~
-   oc create secret generic rhdh-rhbk-cred --from-literal KEYCLOAK_BASE_URL="https://rhbk.apps.myclustername.mydomain.com" --from-literal KEYCLOAK_CLIENT_ID=rhdh-catalog --from-literal KEYCLOAK_CLIENT_SECRET=yrYCAqASuxFir18MoMm0jJClPqNMmc9Y --from-literal KEYCLOAK_REALM=rhdh
-   ~~~
-   **Note**: Remember to replace `rhbk.apps.myclustername.mydomain.com` with your Keycloak hostname
-
-2. Create the configmap that enables the Red Hat build of Keycloak dynamic plugin
+1. Create a namespace for the developer hub demo
    ```
-   oc create configmap rhbk-dynamic-plugin --from-file dynamic-plugins.yaml
+   oc new-project devhub-demo
+   ```
+
+2. Create the secret with the keycloak credentials
+   ```
+   oc create secret generic rhdh-rhbk-cred --from-literal KEYCLOAK_BASE_URL="https://$(oc get routes/rhbk-route -o jsonpath='{.spec.host}' -n rhbk && echo)" --from-literal KEYCLOAK_CLIENT_ID=rhdh --from-literal KEYCLOAK_CLIENT_SECRET=rhdh-super-secret --from-literal KEYCLOAK_REALM=rhdh -n devhub-demo
+   ```
+
+3. Create the configmap that enables the Red Hat build of Keycloak dynamic plugin
+   ```
+   oc create configmap rhbk-dynamic-plugin --from-file dynamic-plugins.yaml -n devhub-demo
    ```
 
 3. Create the app config that contains the RHBK configuration
    ```
-   oc create configmap rhbk-app-config --from-file app-config.yaml
+   oc create configmap rhbk-app-config --from-file app-config.yaml -n devhub-demo
    ```
 
-4. Deploy Backstage CR
+4. Create the `registry.redhat.io` pull secret for `dynamic plugins` installation
    ```
-   oc apply -f backstage.yaml
+   podman login registry.redhat.io
+   oc create secret generic dynamic-plugins-registry-auth --from-file=auth.json=${XDG_RUNTIME_DIR:-~/.config}/containers/auth.json -n devhub-demo
    ```
-   **NOTE**: The current `backstage.yaml` uses `NODE_TLS_REJECT_UNAUTHORIZED=0` to bypass certificate validation for RHBK. This is intended for Proof of Concept (POC) only. For production, this must be removed.
 
-5. Go back to RHBK web console, select the client `rhdh-catalog` and update the `Valid Redirect Uris` and the `Web Origins` with the Developer Hub hostname.
-**Note**: The `Valid Redirect Uris` must include the oidc handler path. E.g: `https://developerhub.hostname.com/api/auth/oidc/handler/frame`
-   - Select the client
-     ![RHBK Client](./RHBK-client.png)
-   - Update the redirect uris and web origins
-     ![RHBK Client1](./RHBK-client1.png)
+5. Deploy Backstage CR
+   ```
+   oc apply -f backstage.yaml -n devhub-demo
+   ```
 
+6. Create the `rhdh` realm with the `rhdh` client in Red Hat build of Keycloak
+   ```
+   sed "s|DEVELOPER_HUB_HOSTNAME|$(oc get routes/backstage-developer-hub -o jsonpath='{.spec.host}' -n devhub-demo)|g" ../rhbk/rhdh-realm.yaml | oc apply -n rhbk -f -
+   ```
+   Wait until the conditions match the following:
+   ```
+   $ oc get keycloakrealmimport/developer-hub-realm -n rhbk -o jsonpath='{.status}' | yq -P
+   conditions:
+     - message: ""
+       status: "True"
+       type: Done
+     - message: ""
+       status: "False"
+       type: Started
+     - message: ""
+       status: "False"
+       type: HasErrors
+   ```
 
-6. Access the developer hub page and login via "oidc". The credentials are:
-username: `test`
-password: `test`
-   - Access the developer hub url
-      ![Developer Hub Oidc](./developer-hub-oidc.png)
-   - Login with the user
-      ![User](./user-dev.png)
-   - See the console
-      ![Developer Hub Console](./developer-hub.png)
+7. Access the developer hub page and login via "oidc". The credentials are `Username: test | Password: test`:
+   ```
+   echo "Developer Hub Console: https://$(oc get routes/backstage-developer-hub -o jsonpath='{.spec.host}' -n devhub-demo && echo)"
+   ```
+   Access the developer hub url
+    ![Developer Hub Oidc](./img/developer-hub-oidc.png)
+   Login with the user
+    ![User](./img/user-dev.png)
+   See the console
+    ![Developer Hub Console](./img/developer-hub.png)

@@ -14,9 +14,6 @@ spec:
     extraEnvs:
       secrets:
       - name: rhdh-rhbk-cred
-      envs:
-      - name: NODE_TLS_REJECT_UNAUTHORIZED # necessary for dealing with the self signed cert of RHBK - cert validation disabled
-        value: "0"
     extraFiles:
       mountPath: /opt/app-root/src
     replicas: 1

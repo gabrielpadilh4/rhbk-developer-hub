@@ -12,7 +12,7 @@ auth:
         sessionDuration: { hours: 24 }
         signIn:
           resolvers:
-            - resolver: emailLocalPartMatchingUserEntityName
+            - resolver: oidcSubClaimMatchingKeycloakUserId
 signInPage: oidc
 catalog:
   providers:
