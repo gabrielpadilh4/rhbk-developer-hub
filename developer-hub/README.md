@@ -36,7 +36,7 @@ This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with
 
 5. Deploy Backstage CR
    ```
-   oc apply -f backstage.yaml -n devhub-demo
+   oc apply -f developer-hub/backstage.yaml -n devhub-demo
    ```
 
 6. Create the `rhdh` realm with the `rhdh` client in Red Hat build of Keycloak
@@ -45,7 +45,7 @@ This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with
    ```
    Check the realm import conditions:
    ```
-   $ oc get keycloakrealmimport/developer-hub-realm -n rhbk -o jsonpath='{.status}' | yq -P
+   oc get keycloakrealmimport/developer-hub-realm -n rhbk -o jsonpath='{.status}' | yq -P
    ```
    It should match the following output:
    ```
