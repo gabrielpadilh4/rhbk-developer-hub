@@ -29,6 +29,7 @@ To achieve a successful integration, follow the documentation in each subdirecto
    oc get installplan -n rhbk
    oc patch installplan/<install-plan-name> -n rhbk --type merge --patch '{"spec":{"approved":true}}'
    ```
+   **NOTE:** Sometimes take some few minutes to the install plan appear due the OLM activies like downloading images and more.
 3. Approve the install plan for Red Hat Developer Hub
    ```   
    oc get installplan -n rhdh-operator

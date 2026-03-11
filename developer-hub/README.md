@@ -20,12 +20,12 @@ This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with
 
 3. Create the configmap that enables the Red Hat build of Keycloak dynamic plugin
    ```
-   oc create configmap rhbk-dynamic-plugin --from-file dynamic-plugins.yaml -n devhub-demo
+   oc create configmap rhbk-dynamic-plugin --from-file developer-hub/dynamic-plugins.yaml -n devhub-demo
    ```
 
 3. Create the app config that contains the RHBK configuration
    ```
-   oc create configmap rhbk-app-config --from-file app-config.yaml -n devhub-demo
+   oc create configmap rhbk-app-config --from-file developer-hub/app-config.yaml -n devhub-demo
    ```
 
 4. Create the `registry.redhat.io` pull secret for `dynamic plugins` installation
@@ -41,11 +41,14 @@ This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with
 
 6. Create the `rhdh` realm with the `rhdh` client in Red Hat build of Keycloak
    ```
-   sed "s|DEVELOPER_HUB_HOSTNAME|$(oc get routes/backstage-developer-hub -o jsonpath='{.spec.host}' -n devhub-demo)|g" ../rhbk/rhdh-realm.yaml | oc apply -n rhbk -f -
+   sed "s|DEVELOPER_HUB_HOSTNAME|$(oc get routes/backstage-developer-hub -o jsonpath='{.spec.host}' -n devhub-demo)|g" rhbk/rhdh-realm.yaml | oc apply -n rhbk -f -
    ```
-   Wait until the conditions match the following:
+   Check the realm import conditions:
    ```
    $ oc get keycloakrealmimport/developer-hub-realm -n rhbk -o jsonpath='{.status}' | yq -P
+   ```
+   It should match the following output:
+   ```
    conditions:
      - message: ""
        status: "True"
