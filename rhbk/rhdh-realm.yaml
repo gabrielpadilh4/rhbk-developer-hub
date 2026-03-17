@@ -38,7 +38,6 @@ spec:
             - query-groups
             - view-users
             - query-users
-            - manage-users
     
       - username: test
         firstName: Developer
