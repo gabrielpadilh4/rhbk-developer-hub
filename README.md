@@ -13,7 +13,6 @@ The integration consists of two main parts:
 
 ## 🛠️ Prerequisites
 * The `oc` CLI tool authenticated to your cluster.
-* `openssl` for local certificate generation.
 
 ## 🚀 Deployment Roadmap
 
