@@ -40,7 +40,7 @@ To achieve a successful integration, follow the documentation in each subdirecto
 ### Phase 2: Identity Provider Setup
 Navigate to the [RHBK directory](./rhbk/README.md) to:
 1. Deploy a PostgreSQL database for Keycloak.
-2. Creatte the Red Hat build of Keycloak instance
+2. Create the Red Hat build of Keycloak instance
 
 ### Phase 3: Developer Hub Setup
 Once Keycloak is running and configured, navigate to the [Developer Hub directory](./developer-hub/README.md) to:
