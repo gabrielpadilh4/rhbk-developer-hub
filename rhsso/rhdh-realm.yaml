@@ -1,0 +1,82 @@
+kind: KeycloakRealm
+apiVersion: keycloak.org/v1alpha1
+metadata:
+  name: rhdh-realm
+  labels:
+    app: rhdh-realm
+spec:
+  realm:
+    id: rhdh
+    realm: rhdh
+    enabled: true
+    displayName: Red Hat Developer Hub Realm
+  instanceSelector:
+    matchLabels:
+      app: rhsso
+---
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: client-secret
+  labels:
+    app: rhdh-client
+spec:
+  client:
+    clientId: rhdh
+    name: rhdh
+    serviceAccountsEnabled: true
+    secret: rhdh-super-secret
+    baseUrl: 'https://DEVELOPER_HUB_HOSTNAME'
+    adminUrl: 'https://DEVELOPER_HUB_HOSTNAME'
+    rootUrl: 'https://DEVELOPER_HUB_HOSTNAME'
+    enabled: true
+    clientAuthenticatorType: client-secret
+    redirectUris:
+      - '*'
+    implicitFlowEnabled: false
+    publicClient: false
+    standardFlowEnabled: true
+    protocol: openid-connect
+    webOrigins:
+      - +
+    directAccessGrantsEnabled: false
+    defaultClientScopes:
+      - acr
+      - email
+      - profile
+      - roles
+      - web-origins
+    optionalClientScopes:
+      - address
+      - microprofile-jwt
+      - offline_access
+      - phone
+  serviceAccountClientRoles:
+    realm-management:
+      - query-groups
+      - view-users
+      - query-users
+  realmSelector:
+    matchLabels:
+      app: rhdh-realm
+---
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  name: test-rhdh-user
+  labels:
+    app: test-user
+spec:
+  realmSelector:
+    matchLabels:
+      app: rhdh-realm
+  user:
+    credentials:
+      - type: password
+        value: test
+    email: test@example.com
+    emailVerified: true
+    enabled: true
+    firstName: Test
+    lastName: User
+    username: test

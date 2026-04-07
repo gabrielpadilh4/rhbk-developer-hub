@@ -1,6 +1,6 @@
-# RHDH Operator - Basic Quickstart Deployment for OpenShift integrated with RHBK
+# RHDH Operator - Basic Quickstart Deployment for OpenShift integrated with RHSSO
 
-This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with Red Hat build of Keycloak (RHBK).
+This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with Red Hat Single Sign-On (RHSSO).
 
 ## Prerequisites
 - An OpenShift cluster with the Developer Hub Operator installed.
@@ -15,17 +15,17 @@ This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with
 
 2. Create the secret with the keycloak credentials
    ```
-   oc create secret generic rhbk-secret --from-literal KEYCLOAK_BASE_URL="https://$(oc get routes/rhbk-route -o jsonpath='{.spec.host}' -n rhbk && echo)" --from-literal KEYCLOAK_CLIENT_ID=rhdh --from-literal KEYCLOAK_CLIENT_SECRET=rhdh-super-secret --from-literal KEYCLOAK_REALM=rhdh -n devhub-demo
+   oc create secret generic rhsso-secret --from-literal KEYCLOAK_BASE_URL="https://$(oc get routes/keycloak -o jsonpath='{.spec.host}' -n rhsso && echo)/auth" --from-literal KEYCLOAK_CLIENT_ID=rhdh --from-literal KEYCLOAK_CLIENT_SECRET=rhdh-super-secret --from-literal KEYCLOAK_REALM=rhdh -n devhub-demo
    ```
 
-3. Create the configmap that enables the Red Hat build of Keycloak dynamic plugin
+3. Create the configmap that enables the Red Hat Single Sign-On dynamic plugin
    ```
-   oc create configmap rhbk-dynamic-plugin --from-file developer-hub/dynamic-plugins.yaml -n devhub-demo
+   oc create configmap rhsso-dynamic-plugin --from-file developer-hub/dynamic-plugins.yaml -n devhub-demo
    ```
 
-3. Create the app config that contains the RHBK configuration
+3. Create the app config that contains the rhsso configuration
    ```
-   oc create configmap rhbk-app-config --from-file developer-hub/app-config.yaml -n devhub-demo
+   oc create configmap rhsso-app-config --from-file developer-hub/app-config.yaml -n devhub-demo
    ```
 
 4. Create the `registry.redhat.io` pull secret for `dynamic plugins` installation
@@ -39,26 +39,9 @@ This guide covers the deployment of Red Hat Developer Hub (RHDH) integrated with
    oc apply -f developer-hub/backstage.yaml -n devhub-demo
    ```
 
-6. Create the `rhdh` realm with the `rhdh` client in Red Hat build of Keycloak
+6. Create the `rhdh` realm with the `rhdh` client in Red Hat Single Sign-On
    ```
-   sed "s|DEVELOPER_HUB_HOSTNAME|$(oc get routes/backstage-developer-hub -o jsonpath='{.spec.host}' -n devhub-demo)|g" rhbk/rhdh-realm.yaml | oc apply -n rhbk -f -
-   ```
-   Check the realm import conditions:
-   ```
-   oc get keycloakrealmimport/developer-hub-realm -n rhbk -o jsonpath='{.status}' | yq -P
-   ```
-   It should match the following output:
-   ```
-   conditions:
-     - message: ""
-       status: "True"
-       type: Done
-     - message: ""
-       status: "False"
-       type: Started
-     - message: ""
-       status: "False"
-       type: HasErrors
+   sed "s|DEVELOPER_HUB_HOSTNAME|$(oc get routes/backstage-developer-hub -o jsonpath='{.spec.host}' -n devhub-demo)|g" rhsso/rhdh-realm.yaml | oc apply -n rhsso -f -
    ```
 
 7. Access the developer hub page and login via "oidc". The credentials are `Username: test | Password: test`:
