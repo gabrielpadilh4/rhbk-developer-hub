@@ -17,7 +17,7 @@ spec:
 apiVersion: keycloak.org/v1alpha1
 kind: KeycloakClient
 metadata:
-  name: client-secret
+  name: rhdh-client
   labels:
     app: rhdh-client
 spec:
@@ -27,8 +27,6 @@ spec:
     serviceAccountsEnabled: true
     secret: rhdh-super-secret
     baseUrl: 'https://DEVELOPER_HUB_HOSTNAME'
-    adminUrl: 'https://DEVELOPER_HUB_HOSTNAME'
-    rootUrl: 'https://DEVELOPER_HUB_HOSTNAME'
     enabled: true
     clientAuthenticatorType: client-secret
     redirectUris:
@@ -65,7 +63,7 @@ kind: KeycloakUser
 metadata:
   name: test-rhdh-user
   labels:
-    app: test-user
+    app: test-rhdh-user
 spec:
   realmSelector:
     matchLabels:
